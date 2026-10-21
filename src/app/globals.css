@@ -8,7 +8,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: ui-monospace, monospace;
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -49,39 +49,40 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  /* 떡집 테마: 아이보리 바탕 + 팥색 포인트 */
+  --background: oklch(0.982 0.007 75);
+  --foreground: oklch(0.24 0.02 40);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.24 0.02 40);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.42 0.11 30);
-  --primary-foreground: oklch(0.985 0 0);
-  --viz-1: #2a78d6;
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.24 0.02 40);
+  --primary: oklch(0.47 0.13 28);
+  --primary-foreground: oklch(0.99 0.005 75);
+  --viz-1: #b9533a;
+  --secondary: oklch(0.955 0.018 65);
+  --secondary-foreground: oklch(0.32 0.05 35);
+  --muted: oklch(0.962 0.01 70);
+  --muted-foreground: oklch(0.53 0.02 50);
+  --accent: oklch(0.95 0.03 35);
+  --accent-foreground: oklch(0.4 0.11 30);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: oklch(0.918 0.012 70);
+  --input: oklch(0.9 0.014 70);
+  --ring: oklch(0.62 0.12 30);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --radius: 0.875rem;
+  --sidebar: oklch(0.995 0.004 75);
+  --sidebar-foreground: oklch(0.24 0.02 40);
+  --sidebar-primary: oklch(0.47 0.13 28);
+  --sidebar-primary-foreground: oklch(0.99 0.005 75);
+  --sidebar-accent: oklch(0.95 0.03 35);
+  --sidebar-accent-foreground: oklch(0.4 0.11 30);
+  --sidebar-border: oklch(0.918 0.012 70);
+  --sidebar-ring: oklch(0.62 0.12 30);
 }
 
 .dark {
@@ -131,5 +132,29 @@
   }
   html {
     @apply font-sans;
+  }
+}
+/* 부드러운 카드 그림자 */
+@utility shadow-soft {
+  box-shadow: 0 1px 2px rgb(60 35 20 / 0.04), 0 6px 20px -8px rgb(60 35 20 / 0.12);
+}
+
+/* 가로 스크롤 영역의 스크롤바 숨김 */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer base {
+  /* 숫자 입력 스피너 숨김 */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
   }
 }

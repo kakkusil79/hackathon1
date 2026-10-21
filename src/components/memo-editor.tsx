@@ -12,9 +12,16 @@ export function MemoEditor({ orderId, initial }: { orderId: string; initial: str
 
   return (
     <div className="flex flex-col gap-2">
-      <Textarea value={memo} onChange={(e) => setMemo(e.target.value)} rows={3} placeholder="요청사항, 포장, 결제 여부 등" />
+      <Textarea
+        value={memo}
+        onChange={(e) => setMemo(e.target.value)}
+        rows={3}
+        placeholder="요청사항, 포장, 결제 여부 등"
+        aria-label="주문 메모"
+        className="rounded-xl"
+      />
       <Button
-        className="self-end"
+        className="self-end rounded-xl"
         disabled={pending || memo === initial}
         onClick={() =>
           startTransition(async () => {

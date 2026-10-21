@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import { formatWon } from "@/lib/format";
 
-// 단일 시리즈 차트만 쓰므로 카테고리 1번 색(blue)만 사용 (globals.css의 --viz-1)
+// 단일 시리즈 차트만 쓰므로 브랜드 테라코타 한 색만 사용 (globals.css의 --viz-1, 흰 배경 대비 3:1 이상 검증)
 const SERIES = "var(--viz-1)";
 const GRID = "var(--border)";
 const AXIS_TICK = { fill: "var(--muted-foreground)", fontSize: 12 };

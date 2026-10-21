@@ -15,6 +15,7 @@ export type CustomerLookup = {
   name: string;
   phone: string;
   memo: string | null;
+  createdAt: string;
   orderCount: number;
   recentOrders: {
     id: string;
@@ -34,7 +35,7 @@ export async function lookupCustomer(
   const customer = await prisma.customer.findUnique({
     where: { phone: normalizePhone(parsed.data) },
     include: {
-      _count: { select: { orders: true } },
+      _count: { select: { orders: { where: { status: { not: "CANCELED" } } } } },
       orders: {
         orderBy: { pickupAt: "desc" },
         take: 3,
@@ -51,6 +52,7 @@ export async function lookupCustomer(
       name: customer.name,
       phone: customer.phone,
       memo: customer.memo,
+      createdAt: customer.createdAt.toISOString(),
       orderCount: customer._count.orders,
       recentOrders: customer.orders.map((o) => ({
         id: o.id,

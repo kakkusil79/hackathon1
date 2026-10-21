@@ -8,8 +8,8 @@ import { prisma } from "@/lib/prisma";
 export default function OrdersPage() {
   return (
     <>
-      <PageHeader title="주문 현황" description="리스트·칸반·캘린더로 주문을 보고 상태를 바로 바꿀 수 있어요." />
-      <Suspense fallback={<LoadingBlock />}>
+      <PageHeader eyebrow="📋 주문 현황" title="주문 한눈에 보기" description="날짜별 목록, 진행 단계별 칸반, 월간 캘린더로 확인하고 상태를 바로 바꿔요." />
+      <Suspense fallback={<LoadingBlock rows={4} />}>
         <OrdersLoader />
       </Suspense>
     </>

@@ -7,8 +7,8 @@ import { prisma } from "@/lib/prisma";
 export default function ProductsPage() {
   return (
     <>
-      <PageHeader title="상품" description="떡 상품과 가격을 관리합니다. 판매 중지한 상품은 주문 입력 화면에서 숨겨져요." />
-      <Suspense fallback={<LoadingBlock />}>
+      <PageHeader eyebrow="🍡 상품" title="떡 메뉴 관리" description="가격과 판매 여부를 관리해요. 판매를 끈 상품은 주문 입력 화면에서 숨겨져요." />
+      <Suspense fallback={<LoadingBlock rows={3} />}>
         <ProductsLoader />
       </Suspense>
     </>
