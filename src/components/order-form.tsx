@@ -169,7 +169,7 @@ export function OrderForm({ products, todayKey }: { products: Product[]; todayKe
                   runLookup(phone);
                 }
               }}
-              className="h-11 max-w-xs text-lg tracking-wide"
+              className="h-11 flex-1 text-lg tracking-wide sm:max-w-xs sm:flex-none"
             />
             <Button
               type="button"
@@ -212,9 +212,13 @@ export function OrderForm({ products, todayKey }: { products: Product[]; todayKe
                 )}
               </p>
               {lookup.customer.recentOrders.length > 0 && (
-                <div className="grid gap-2 sm:grid-cols-3">
+                // 휴대폰에서는 옆으로 밀어서 보는 카드, 넓은 화면에서는 3열
+                <div className="-mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0">
                   {lookup.customer.recentOrders.map((o, idx) => (
-                    <div key={o.id} className="flex flex-col gap-2 rounded-lg border bg-muted/40 p-3">
+                    <div
+                      key={o.id}
+                      className="flex min-w-[80%] snap-start flex-col gap-2 rounded-lg border bg-muted/40 p-3 sm:min-w-0"
+                    >
                       <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
                         <span>
                           {idx === 0 ? "최근 " : ""}
@@ -276,27 +280,34 @@ export function OrderForm({ products, todayKey }: { products: Product[]; todayKe
           {cart.length > 0 && (
             <div className="rounded-lg border bg-background">
               {cart.map(({ product, qty }) => (
-                <div key={product.id} className="flex items-center gap-2 border-b px-3 py-2 last:border-b-0">
-                  <span className="flex-1 text-sm">{product.name}</span>
-                  <Button type="button" size="icon-sm" variant="outline" onClick={() => changeQty(product.id, -1)} aria-label="하나 빼기">
-                    <Minus />
-                  </Button>
-                  <Input
-                    type="number"
-                    min={1}
-                    value={qty}
-                    onChange={(e) => setQty(product.id, Number(e.target.value))}
-                    className="h-7 w-16 text-center"
-                    aria-label={`${product.name} 수량`}
-                  />
-                  <span className="w-6 text-xs text-muted-foreground">{product.unit}</span>
-                  <Button type="button" size="icon-sm" variant="outline" onClick={() => changeQty(product.id, 1)} aria-label="하나 더하기">
-                    <Plus />
-                  </Button>
-                  <span className="w-24 text-right text-sm tabular-nums">{formatWon(product.price * qty)}</span>
-                  <Button type="button" size="icon-sm" variant="ghost" onClick={() => setQty(product.id, 0)} aria-label="삭제">
-                    <Trash2 />
-                  </Button>
+                // 휴대폰: 1줄 상품명, 2줄 수량·금액 / 넓은 화면: 한 줄
+                <div
+                  key={product.id}
+                  className="flex flex-col gap-2 border-b px-3 py-2.5 last:border-b-0 sm:flex-row sm:items-center"
+                >
+                  <span className="flex-1 text-sm font-medium">{product.name}</span>
+                  <div className="flex items-center gap-2">
+                    <Button type="button" size="icon" variant="outline" onClick={() => changeQty(product.id, -1)} aria-label="하나 빼기">
+                      <Minus />
+                    </Button>
+                    <Input
+                      type="number"
+                      inputMode="numeric"
+                      min={1}
+                      value={qty}
+                      onChange={(e) => setQty(product.id, Number(e.target.value))}
+                      className="h-8 w-16 text-center"
+                      aria-label={`${product.name} 수량`}
+                    />
+                    <Button type="button" size="icon" variant="outline" onClick={() => changeQty(product.id, 1)} aria-label="하나 더하기">
+                      <Plus />
+                    </Button>
+                    <span className="w-6 text-xs text-muted-foreground">{product.unit}</span>
+                    <span className="ml-auto text-right text-sm tabular-nums sm:w-24">{formatWon(product.price * qty)}</span>
+                    <Button type="button" size="icon" variant="ghost" onClick={() => setQty(product.id, 0)} aria-label="삭제">
+                      <Trash2 />
+                    </Button>
+                  </div>
                 </div>
               ))}
               <div className="flex justify-between px-3 py-2 font-bold">
@@ -387,7 +398,8 @@ export function OrderForm({ products, todayKey }: { products: Product[]; todayKe
         </CardContent>
       </Card>
 
-      <div className="sticky bottom-0 -mx-4 flex items-center justify-between gap-3 border-t bg-background/95 px-4 py-3 backdrop-blur">
+      {/* 휴대폰에서는 하단 탭바 바로 위에 붙는다 */}
+      <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-30 -mx-4 flex items-center justify-between gap-3 border-t bg-background/95 px-4 py-3 backdrop-blur md:bottom-0">
         <div>
           <p className="text-xs text-muted-foreground">
             {cart.length}개 상품 · {formatDateKey(pickupDate)} {pickupTime}

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { CustomerEditor } from "@/components/customer-editor";
+import { OrderCard } from "@/components/order-card";
 import { LoadingBlock } from "@/components/page-header";
 import { StatusSelect } from "@/components/status";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -80,7 +81,26 @@ async function CustomerDetail({ params }: { params: Promise<{ id: string }> }) {
             <CardTitle>주문 이력</CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
+            {/* 휴대폰: 카드 목록 */}
+            <div className="flex flex-col gap-2 md:hidden">
+              {customer.orders.length === 0 && <p className="py-6 text-center text-sm text-muted-foreground">주문이 없어요</p>}
+              {customer.orders.map((o) => (
+                <OrderCard
+                  key={o.id}
+                  order={{
+                    id: o.id,
+                    pickupAt: o.pickupAt.toISOString(),
+                    status: o.status,
+                    pickupType: o.pickupType,
+                    totalPrice: o.totalPrice,
+                    memo: o.memo,
+                    itemsSummary: o.items.map((i) => `${i.product.name} ${i.quantity}${i.product.unit}`).join(", "),
+                  }}
+                />
+              ))}
+            </div>
+            {/* 넓은 화면: 표 */}
+            <Table className="hidden md:table">
               <TableHeader>
                 <TableRow>
                   <TableHead>픽업 일시</TableHead>

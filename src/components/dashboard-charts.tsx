@@ -54,7 +54,7 @@ export function DailyRevenueChart({ data }: { data: { label: string; revenue: nu
         {/* 주문이 없는 날이 많아 선으로 이으면 연속처럼 보이므로 일별 막대로 표시 */}
         <BarChart data={data} margin={{ top: 8, right: 12, bottom: 0, left: 0 }} barCategoryGap={2}>
           <CartesianGrid vertical={false} stroke={GRID} />
-          <XAxis dataKey="label" tick={AXIS_TICK} tickLine={false} axisLine={{ stroke: GRID }} interval={4} />
+          <XAxis dataKey="label" tick={AXIS_TICK} tickLine={false} axisLine={{ stroke: GRID }} interval="preserveStartEnd" minTickGap={20} />
           <YAxis tick={AXIS_TICK} tickLine={false} axisLine={false} tickFormatter={compactWon} width={48} />
           <Tooltip
             cursor={{ fill: "var(--muted)" }}

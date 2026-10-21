@@ -12,7 +12,8 @@ import { prisma } from "@/lib/prisma";
 export default function HomePage() {
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-      <section>
+      {/* min-w-0: 가로 스크롤 영역이 그리드 칸을 화면 밖으로 밀어내지 않도록 */}
+      <section className="min-w-0">
         <h1 className="mb-1 text-2xl font-bold tracking-tight">새 주문 받기</h1>
         <p className="mb-6 text-sm text-muted-foreground">
           전화번호를 먼저 입력하면 단골 고객의 지난 주문을 바로 불러옵니다.

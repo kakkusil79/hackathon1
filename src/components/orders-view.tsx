@@ -5,6 +5,7 @@ import { useMemo, useState, useTransition } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { updateOrderStatus } from "@/app/actions/orders";
+import { OrderCard } from "@/components/order-card";
 import { StatusBadge, StatusSelect } from "@/components/status";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -84,17 +85,26 @@ function ListView({ orders, todayKey }: { orders: OrderRow[]; todayKey: string }
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-2">
+      {/* 기간 버튼은 휴대폰에서 한 줄로 옆으로 밀어서 선택 */}
+      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 md:mx-0 md:flex-wrap md:px-0">
         {PERIODS.map((p) => (
-          <Button key={p.value} size="sm" variant={period === p.value ? "default" : "outline"} onClick={() => setPeriod(p.value)}>
+          <Button
+            key={p.value}
+            size="sm"
+            variant={period === p.value ? "default" : "outline"}
+            onClick={() => setPeriod(p.value)}
+            className="shrink-0"
+          >
             {p.label}
           </Button>
         ))}
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
         <select
           aria-label="상태 필터"
           value={status}
           onChange={(e) => setStatus(e.target.value as OrderStatus | "ALL")}
-          className="h-7 rounded-md border bg-background px-2 text-sm"
+          className="h-8 rounded-md border bg-background px-2 text-sm"
         >
           <option value="ALL">모든 상태</option>
           {ORDER_STATUSES.map((s) => (
@@ -107,14 +117,27 @@ function ListView({ orders, todayKey }: { orders: OrderRow[]; todayKey: string }
           placeholder="고객명·전화번호·상품 검색"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="h-7 w-56"
+          className="h-8 min-w-0 flex-1 md:w-56 md:flex-none"
         />
-        <span className="ml-auto text-sm text-muted-foreground">
+        <span className="w-full text-sm text-muted-foreground md:ml-auto md:w-auto">
           {filtered.length}건 · {formatWon(total)}
         </span>
       </div>
 
-      <div className="overflow-hidden rounded-xl border bg-background">
+      {/* 휴대폰: 카드 목록 */}
+      <div className="flex flex-col gap-2 md:hidden">
+        {filtered.length === 0 && (
+          <p className="rounded-xl border bg-background py-10 text-center text-sm text-muted-foreground">
+            조건에 맞는 주문이 없어요
+          </p>
+        )}
+        {filtered.map((o) => (
+          <OrderCard key={o.id} order={o} />
+        ))}
+      </div>
+
+      {/* 넓은 화면: 표 */}
+      <div className="hidden overflow-hidden rounded-xl border bg-background md:block">
         <Table>
           <TableHeader>
             <TableRow>
@@ -173,11 +196,12 @@ function KanbanView({ orders, todayKey }: { orders: OrderRow[]; todayKey: string
   );
 
   return (
-    <div className="grid gap-3 md:grid-cols-4">
+    // 휴대폰: 상태 컬럼을 옆으로 밀어서 이동 / 넓은 화면: 4열
+    <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-4 md:overflow-visible md:px-0">
       {KANBAN_COLUMNS.map((col) => {
         const list = visible.filter((o) => o.status === col);
         return (
-          <div key={col} className="flex flex-col gap-2 rounded-xl bg-muted p-2">
+          <div key={col} className="flex w-[82%] shrink-0 snap-center flex-col gap-2 rounded-xl bg-muted p-2 md:w-auto">
             <div className="flex items-center justify-between px-1 py-1">
               <StatusBadge status={col} />
               <span className="text-xs text-muted-foreground">
@@ -314,7 +338,7 @@ function CalendarView({ orders, todayKey }: { orders: OrderRow[]; todayKey: stri
                 key={key}
                 onClick={() => setSelected(key)}
                 className={cn(
-                  "flex min-h-20 flex-col items-start gap-1 rounded-lg border p-1.5 text-left transition-colors hover:border-primary",
+                  "flex min-h-14 flex-col items-start gap-1 rounded-lg border p-1 text-left transition-colors hover:border-primary sm:min-h-20 sm:p-1.5",
                   key === selected && "border-primary ring-1 ring-primary",
                   key === todayKey && "bg-primary/5",
                 )}
@@ -322,7 +346,9 @@ function CalendarView({ orders, todayKey }: { orders: OrderRow[]; todayKey: stri
                 <span className={cn("text-xs", key === todayKey && "font-bold text-primary")}>{Number(key.slice(8))}</span>
                 {list.length > 0 && (
                   <>
-                    <span className="rounded bg-primary px-1.5 text-xs font-medium text-primary-foreground">{list.length}건</span>
+                    <span className="rounded bg-primary px-1 text-[11px] font-medium text-primary-foreground sm:px-1.5 sm:text-xs">
+                      {list.length}건
+                    </span>
                     <span className="hidden text-[11px] leading-tight text-muted-foreground sm:block">
                       {active > 0 ? `미완료 ${active}` : "모두 완료"}
                     </span>
